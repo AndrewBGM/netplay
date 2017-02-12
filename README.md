@@ -49,6 +49,29 @@ netplay_async(session);
 netplay_destroy(session);
 ```
 
+## Event and Data handlers
+
+You can also assign handlers to certain events, specifically handling incoming
+connections for servers, and unknown packet types for both sides.
+
+```javascript
+netplay_set_event_handler(session, network_type_connect, handle_connect);
+netplay_set_event_handler(session, network_type_disconnect, handle_disconnect);
+netplay_set_event_handler(session, network_type_data, handle_data);
+```
+
+```javascript
+/// handle_connect(session, ip, port, socket, uuid, success);
+/// handle_disconnect(session, ip, port, socket, uuid, success);
+/// handle_data(session, socket, uuid, buffer);
+```
+
+## Utility functions
+
+There are more utility functions which don't need to be documented, as they are
+self explanatory in their name, for instance `netplay_get_host`, `netplay_get_clients`
+and `netplay_get_socket`.
+
 ## Built With
 
 * [Game Maker Studio 2](http://www.yoyogames.com/gamemaker/studio2) - The game engine used
