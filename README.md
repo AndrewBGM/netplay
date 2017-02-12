@@ -38,6 +38,17 @@ netplay_set_packet(session, 1, buffer_string);
 netplay_set_packet_handler(session, undefined, 1, handle_echo);
 ```
 
+### Common
+##### Networking Event: Async
+```javascript
+netplay_async(session);
+```
+
+##### Cleanup
+```javascript
+netplay_destroy(session);
+```
+
 ## Built With
 
 * [Game Maker Studio 2](http://www.yoyogames.com/gamemaker/studio2) - The game engine used
