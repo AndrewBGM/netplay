@@ -379,7 +379,7 @@
                         
                     ],
                     "externalName": "netplay_open",
-                    "help": "netplay_open(host, maxclients)",
+                    "help": "netplay_open(port, maxclients)",
                     "hidden": false,
                     "kind": 2,
                     "name": "netplay_open",
