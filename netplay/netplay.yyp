@@ -71,6 +71,14 @@
             }
         },
         {
+            "Key": "147751e7-aaf3-4c33-839e-26e27b2f7dfb",
+            "Value": {
+                "id": "e5b8b5fe-555a-4332-807b-6566461fc422",
+                "resourcePath": "extensions\\netplay\\netplay.yy",
+                "resourceType": "GMExtension"
+            }
+        },
+        {
             "Key": "1f6eb519-6e2d-44aa-ba05-18c54a3c277f",
             "Value": {
                 "id": "b3f0b064-59a9-427a-aa8d-5742efc5f9c8",
