@@ -7,7 +7,13 @@ netplay tackles the issue of "packets" in GameMaker and allows you to specify pa
 ### Client
 
 ```javascript
-/// handle_echo(session, socket, client, uuid, params);
+/// handle_echo_client(session, socket, client_id, packet_id, params);
+var session   = argument[0],
+    socket    = argument[1],
+    client_id = argument[2],
+    packet_id = argument[3],
+    params    = argument[4];
+
 var text = params[0];
 
 show_debug_message("Server sent " + text);
@@ -17,25 +23,31 @@ show_debug_message("Server sent " + text);
 session = netplay_connect("localhost", 5000);
 
 netplay_set_packet(session, 1, buffer_string);
-netplay_set_packet_handler(session, 1, handle_echo);
+netplay_set_packet_handler(session, 1, handle_echo_client);
 
-netplay_send(session, undefined, uuid, text);
+netplay_send(session, undefined, 1, text);
 ```
 
 ### Server
 ```javascript
-/// handle_echo(session, socket, client, uuid, params);
+/// handle_echo_server(session, socket, client_id, packet_id, params);
+var session   = argument[0],
+    socket    = argument[1],
+    client_id = argument[2],
+    packet_id = argument[3],
+    params    = argument[4];
+
 var text = params[0];
 
 show_debug_message("Client sent " + text);
-netplay_send(session, socket, uuid, text);
+netplay_send(session, socket, packet_id, text);
 ```
 
 ```javascript
 session = netplay_open(5000, 32);
 
 netplay_set_packet(session, 1, buffer_string);
-netplay_set_packet_handler(session, undefined, 1, handle_echo);
+netplay_set_packet_handler(session, undefined, 1, handle_echo_server);
 ```
 
 ### Common
@@ -61,9 +73,9 @@ netplay_set_event_handler(session, network_type_data, handle_data);
 ```
 
 ```javascript
-/// handle_connect(session, ip, port, socket, uuid, success);
-/// handle_disconnect(session, ip, port, socket, uuid, success);
-/// handle_data(session, socket, uuid, buffer);
+/// handle_connect(session, ip, port, socket, client_id, success);
+/// handle_disconnect(session, ip, port, socket, client_id, success);
+/// handle_data(session, socket, client_id, buffer);
 ```
 
 ## Utility functions
