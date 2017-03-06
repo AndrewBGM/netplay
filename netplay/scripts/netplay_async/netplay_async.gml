@@ -23,7 +23,7 @@ switch(type) {
         var socket  = async_load[? "socket"],
             success = async_load[? "success"];
 
-        var uuid = undefined;
+        var client_id = undefined;
 
         if (is_server) {
             var clients = session[? "clients"];
@@ -31,13 +31,13 @@ switch(type) {
             for(var i = 0, j = ds_list_size(clients);i < j;i ++) {
                 if (clients[| i] == undefined) {
                     clients[| i] = socket;
-                    uuid = i;
+                    client_id = i;
                     break;
                 }
             }
 
-            if is_undefined(uuid) {
-                uuid = ds_list_size(clients);
+            if is_undefined(client_id) {
+                client_id = ds_list_size(clients);
                 ds_list_add(clients, socket);
             }
         }
@@ -45,7 +45,7 @@ switch(type) {
         var handler = session[? "connect_handler"];
 
         if !is_undefined(handler) {
-            script_execute(handler, session, ip, port, socket, uuid, success);
+            script_execute(handler, session, ip, port, socket, client_id, success);
         }
 
         break;
@@ -55,18 +55,18 @@ switch(type) {
             success = async_load[? "success"];
 
         if (is_server) {
-            var clients = session[? "clients"],
-                uuid    = ds_list_find_index(clients, socket);
+            var clients   = session[? "clients"],
+                client_id = ds_list_find_index(clients, socket);
 
-            if (uuid >= 0) {
-                clients[| uuid] = undefined;
+            if (client_id >= 0) {
+                clients[| client_id] = undefined;
             }
         }
 
         var handler = session[? "disconnect_handler"];
 
         if !is_undefined(handler) {
-            script_execute(handler, session, ip, port, socket, uuid, success);
+            script_execute(handler, session, ip, port, socket, client_id, success);
         }
 
         break;
@@ -75,7 +75,7 @@ switch(type) {
         var buffer = async_load[? "buffer"],
             size   = async_load[? "size"];
 
-        var uuid = undefined;
+        var client_id = undefined;
 
         var match = (_id == session[? "socket"]);
         if (!match && is_server) {
@@ -83,7 +83,7 @@ switch(type) {
 
             for(var i = 0, j = ds_list_size(clients);i < j;i ++) {
                 if (clients[| i] == _id) {
-                    uuid = i;
+                    client_id = i;
                     match = true;
                     break;
                 }
@@ -94,8 +94,8 @@ switch(type) {
             return;
         }
 
-        var packet_type = buffer_read(buffer, session[? "packet_type"]),
-            types       = packets[| packet_type];
+        var packet_id = buffer_read(buffer, session[? "packet_type"]),
+            types     = packets[| packet_id];
 
         if !is_array(types) {
             var handler = session[? "data_handler"];
@@ -103,15 +103,15 @@ switch(type) {
             buffer_seek(buffer, buffer_seek_start, 0);
 
             if !is_undefined(handler) {
-                script_execute(handler, session, _id, uuid, buffer);
+                script_execute(handler, session, _id, client_id, buffer);
             } else {
-                show_debug_message("[NETPLAY] Unhandled packet UUID: " + string(packet_type));
+                show_debug_message("[NETPLAY] Unhandled packet ID: " + string(packet_id));
             }
 
             return;
         }
 
-        var handler = handlers[| packet_type],
+        var handler = handlers[| packet_id],
             count   = array_length_1d(types),
             params  = array_create(count, undefined);
 
@@ -119,7 +119,7 @@ switch(type) {
             params[k] = buffer_read(buffer, types[k]);
         }
 
-        script_execute(handler, session, _id, uuid, packet_type, params);
+        script_execute(handler, session, _id, client_id, packet_id, params);
 
         break;
 }

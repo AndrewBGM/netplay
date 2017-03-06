@@ -1,12 +1,12 @@
 /// @description netplay_set_packet
 /// @param session
-/// @param uuid
+/// @param packet_id
 /// @param types...
 
 
-var session = argument[0],
-    uuid    = argument[1],
-    types   = argument[2];
+var session   = argument[0],
+    packet_id = argument[1],
+    types     = argument[2];
 
 if !is_array(types) {
     types = array_create(argument_count - 2, undefined);
@@ -17,4 +17,4 @@ if !is_array(types) {
 }
 
 var packets = session[? "packets"];
-packets[| uuid] = types;
+packets[| packet_id] = types;

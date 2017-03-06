@@ -1,10 +1,10 @@
 /// @description netplay_get_packet
 /// @param session
-/// @param uuid
+/// @param packet_id
 
 
-var session = argument[0],
-    uuid    = argument[1];
+var session   = argument[0],
+    packet_id = argument[1];
 
 var packets = session[? "packets"];
-return packets[| uuid];
+return packets[| packet_id];
