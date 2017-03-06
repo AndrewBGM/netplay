@@ -16,7 +16,7 @@
     "option_mac_icon_png": "${base_options_dir}\\mac\\icons\\1024.png",
     "option_mac_interpolate_pixels": false,
     "option_mac_menu_dock": false,
-    "option_mac_output_dir": "~\/gamemakerStudio2",
+    "option_mac_output_dir": "~\/GameMakerStudio2\/Mac",
     "option_mac_resize_window": false,
     "option_mac_scale": 0,
     "option_mac_signing_identity": null,
