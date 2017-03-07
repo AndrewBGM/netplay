@@ -47,6 +47,14 @@
             }
         },
         {
+            "Key": "06f58e90-2414-4498-8576-ec97b73e4db5",
+            "Value": {
+                "id": "4e599a21-1438-47d1-8206-6a87b354ca75",
+                "resourcePath": "scripts\\netplay_get_remote_sockets\\netplay_get_remote_sockets.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "078008bf-a9d5-42c2-bc93-9b16b34a7ed9",
             "Value": {
                 "id": "b7e6435b-8f49-4683-8717-0404bf60cf66",
@@ -545,6 +553,7 @@
         "7a747f24-5aa4-43f7-b4e1-38fa9d1a4453",
         "94b8a35f-eaab-45ba-a775-87f91b0d4e43",
         "ac75129e-f47e-4b87-ae19-033849c7602a",
+        "06f58e90-2414-4498-8576-ec97b73e4db5",
         "545be668-88c2-4c08-8437-115f08d71c6d",
         "10d8f951-6fee-4a38-8eeb-4b8acadd7e6f",
         "03a02277-ab7c-4529-a524-a93a061c33f0",
