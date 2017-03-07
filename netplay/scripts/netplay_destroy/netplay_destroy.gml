@@ -2,21 +2,8 @@
 /// @param session
 
 
-var session = argument[0];
+var _session = argument[0];
 
-if !ds_exists(session, ds_type_map) {
-    return;
-}
+buffer_delete(_session[? "buffer"]);
 
-network_destroy(session[? "socket"]);
-
-buffer_delete(session[? "buffer"]);
-
-if !is_undefined(session[? "clients"]) {
-    ds_list_destroy(session[? "clients"]);
-}
-
-ds_list_destroy(session[? "packets"]);
-ds_list_destroy(session[? "handlers"]);
-
-ds_map_destroy(session);
+ds_map_destroy(_session);

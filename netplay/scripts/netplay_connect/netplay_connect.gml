@@ -3,34 +3,32 @@
 /// @param port
 
 
-var host = argument[0],
-    port = argument[1];
+var _host = argument[0],
+    _port = argument[1];
 
-var socket  = network_create_socket(network_socket_tcp),
-    success = network_connect_raw(socket, host, port);
+var _socket = network_create_socket(network_socket_tcp),
+    _server = network_connect(_socket, _host, _port);
 
-if (success < 0) {
-    show_debug_message("[NETPLAY] Failed to connect to " + host + ":" + string(port));
+if (_server < 0) {
+    show_debug_message("[NETPLAY] Failed to connect to server " + string(_host) + ":" + string(_port));
+
+    network_destroy(_socket);
+
     return undefined;
 }
 
-var session = ds_map_create();
+var _session = ds_map_create();
 
-session[? "is_server"] = false;
+_session[? "host"] = _host;
+_session[? "port"] = _port;
 
-session[? "packet_type"] = buffer_u8;
+_session[? "socket"] = _socket;
+_session[? "buffer"] = buffer_create(128, buffer_grow, 1);
 
-session[? "connect_handler"]    = undefined;
-session[? "data_handler"]       = undefined;
-session[? "disconnect_handler"] = undefined;
+_session[? "header_type"] = buffer_u8;
 
-session[? "host"]    = host;
-session[? "port"]    = port;
-session[? "socket"]  = socket;
-session[? "buffer"]  = buffer_create(128, buffer_grow, 1);
+ds_map_add_map(_session, "packets", ds_map_create());
+ds_map_add_map(_session, "packet_handlers", ds_map_create());
+ds_map_add_map(_session, "event_handlers", ds_map_create());
 
-session[? "clients"]  = undefined;
-session[? "packets"]  = ds_list_create();
-session[? "handlers"] = ds_list_create();
-
-return session;
+return _session;

@@ -2,6 +2,6 @@
 /// @param session
 
 
-var session = argument[0];
+var _session = argument[0];
 
-return session[? "host"];
+return _session[? "host"];

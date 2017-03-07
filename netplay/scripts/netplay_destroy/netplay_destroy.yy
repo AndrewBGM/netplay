@@ -1,5 +1,5 @@
 {
-    "id": "3c526ddf-5087-46c9-afa5-7de80e3452c9",
+    "id": "907ef585-6562-4a32-b612-6f3ecdb63be8",
     "modelName": "GMScript",
     "mvc": "1.0",
     "name": "netplay_destroy",

@@ -1,10 +1,15 @@
 /// @description netplay_get_packet
 /// @param session
-/// @param packet_id
+/// @param id
 
 
-var session   = argument[0],
-    packet_id = argument[1];
+var _session   = argument[0],
+    _id        = argument[1];
 
-var packets = session[? "packets"];
-return packets[| packet_id];
+var _packets = _session[? "packets"];
+
+if !ds_map_exists(_packets, _id) {
+    return undefined;
+}
+
+return _packets[? _id];

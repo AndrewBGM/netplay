@@ -1,46 +1,48 @@
 /// @description netplay_send
 /// @param session
-/// @param target
+/// @param socket
 /// @param packet_id
-/// @param params...
+/// @param values...
 
 
-var session   = argument[0],
-    target    = argument[1],
-    packet_id = argument[2],
-    params    = argument[3];
+var _session   = argument[0],
+    _socket    = argument[1],
+    _packet_id = argument[2],
+    _values    = array_create(argument_count - 3, undefined);
 
-if !is_array(argument[3]) {
-    params = array_create(argument_count - 3, undefined);
-    
-    for(var i = 3;i < argument_count;i ++) {
-        params[i - 3] = argument[i];
-    }
+for(var i = 3;i < argument_count;i ++) {
+    _values[i - 3] = argument[i];
 }
 
-var packets = session[? "packets"],
-    types   = packets[| packet_id];
+var _packets = _session[? "packets"];
 
-if is_undefined(types) {
-    show_debug_message("[NETPLAY] Unknown packet ID: " + string(packet_id));
-    return;
+if !ds_map_exists(_packets, _packet_id) {
+    show_debug_message("[NETPLAY] Unknown packet ID (" + string(_packet_id) + ")");
+
+    return undefined;
 }
 
-var buffer = session[? "buffer"];
-buffer_seek(buffer, buffer_seek_start, 0);
+var _packet_types = _packets[? _packet_id];
 
-buffer_write(buffer, session[? "packet_type"], packet_id);
-for(var i = 0, j = array_length_1d(types);i < j;i ++) {
-    buffer_write(buffer, types[@ i], params[@ i]);
+if (array_length_1d(_packet_types) != array_length_1d(_values)) {
+    show_debug_message("[NETPLAY] Incorrect number of arguments for packet ID (" + string(_packet_id) + ")");
+
+    return undefined;
 }
 
-if (!session[? "is_server"]) {
-    target = session[? "socket"];
+var _buffer = _session[? "buffer"];
+
+buffer_seek(_buffer, buffer_seek_start, 0);
+buffer_write(_buffer, _session[? "header_type"], _packet_id);
+
+for(var j = 0, l = array_length_1d(_packet_types);j < l;j ++) {
+    buffer_write(_buffer, _packet_types[j], _values[j]);
 }
 
-var res = network_send_raw(target, buffer, buffer_tell(buffer));
-if (res < 0) {
-    show_debug_message("[NETPLAY] Failed to send packet ID: " + string(packet_id));
+var _size = network_send_packet(_socket, _buffer, buffer_tell(_buffer));
+
+if (_size < 0) {
+    show_debug_message("[NETPLAY] Failed to send packet ID (" + string(_packet_id) + ")");
 }
 
-return res;
+return _size;

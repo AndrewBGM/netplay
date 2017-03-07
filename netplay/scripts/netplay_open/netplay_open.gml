@@ -3,33 +3,33 @@
 /// @param maxclients
 
 
-var port       = argument[0],
-    maxclients = argument[1];
+var _port       = argument[0],
+    _maxclients = argument[1];
 
-var socket = network_create_server_raw(network_socket_tcp, port, maxclients);
+var _socket = network_create_server(network_socket_tcp, _port, _maxclients);
 
-if (socket < 0) {
-    show_debug_message("[NETPLAY] Failed to listen on port " + string(port));
+if (_socket < 0) {
+    show_debug_message("[NETPLAY] Failed to start server on port " + string(_port));
+
+    network_destroy(_socket);
+
     return undefined;
 }
 
-var session = ds_map_create();
+var _session = ds_map_create();
 
-session[? "is_server"] = true;
+_session[? "host"] = "self";
+_session[? "port"] = _port;
 
-session[? "packet_type"] = buffer_u8;
+_session[? "socket"] = _socket;
+_session[? "buffer"] = buffer_create(128, buffer_grow, 1);
 
-session[? "connect_handler"]    = undefined;
-session[? "data_handler"]       = undefined;
-session[? "disconnect_handler"] = undefined;
+_session[? "header_type"] = buffer_u8;
 
-session[? "host"]    = "self";
-session[? "port"]    = port;
-session[? "socket"]  = socket;
-session[? "buffer"]  = buffer_create(128, buffer_grow, 1);
+ds_map_add_map(_session, "packets", ds_map_create());
+ds_map_add_map(_session, "packet_handlers", ds_map_create());
+ds_map_add_map(_session, "event_handlers", ds_map_create());
 
-session[? "clients"]  = ds_list_create();
-session[? "packets"]  = ds_list_create();
-session[? "handlers"] = ds_list_create();
+ds_map_add_list(_session, "remote_sockets", ds_list_create());
 
-return session;
+return _session;

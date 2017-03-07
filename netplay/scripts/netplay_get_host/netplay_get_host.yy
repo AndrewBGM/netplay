@@ -1,5 +1,5 @@
 {
-    "id": "0c885205-69f7-43c7-b6d1-25fc3bc8664b",
+    "id": "10d8f951-6fee-4a38-8eeb-4b8acadd7e6f",
     "modelName": "GMScript",
     "mvc": "1.0",
     "name": "netplay_get_host",
