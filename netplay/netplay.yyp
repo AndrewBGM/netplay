@@ -79,10 +79,34 @@
             }
         },
         {
+            "Key": "13c7e014-41b0-47d6-ac69-ed61f16831af",
+            "Value": {
+                "id": "613fd853-e235-42bd-8e17-6aeb70a8cffd",
+                "resourcePath": "scripts\\example_connect_client_handler\\example_connect_client_handler.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "1bb38998-74d9-4721-85f5-d17f99d97c20",
             "Value": {
                 "id": "c6fb154f-a093-44fe-b564-a3bd6c4229ad",
                 "resourcePath": "scripts\\netplay_remove_packet\\netplay_remove_packet.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
+            "Key": "2198ce61-bfd6-4668-828e-dce98b12aed8",
+            "Value": {
+                "id": "ffd4fa21-2f8a-4313-9997-cb8e6b58006c",
+                "resourcePath": "scripts\\example_disconnect_client_handler\\example_disconnect_client_handler.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
+            "Key": "22db8a57-1d27-42c6-84d1-fa459d7a39a1",
+            "Value": {
+                "id": "34a45c56-48bb-4032-8063-45a5c3a6e34b",
+                "resourcePath": "scripts\\example_disconnect_server_handler\\example_disconnect_server_handler.yy",
                 "resourceType": "GMScript"
             }
         },
@@ -227,6 +251,14 @@
             "Value": {
                 "id": "22f9cc0e-3e24-4e9c-9aad-84d9c2701725",
                 "resourcePath": "scripts\\netplay_add_event_handler\\netplay_add_event_handler.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
+            "Key": "78b9aec4-0611-42ce-801f-42059f7bfe8f",
+            "Value": {
+                "id": "9248237c-bb17-48a2-99bd-1fd434aaecab",
+                "resourcePath": "scripts\\example_data_client_handler\\example_data_client_handler.yy",
                 "resourceType": "GMScript"
             }
         },
@@ -391,6 +423,14 @@
             }
         },
         {
+            "Key": "b9849a19-c59c-46f6-a8d6-b3bc3cc5a982",
+            "Value": {
+                "id": "a9c0c0f2-a857-40f5-a8ab-fa512dfab20c",
+                "resourcePath": "scripts\\example_data_server_handler\\example_data_server_handler.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "bc2fda41-9024-4b11-b101-bd643f5244df",
             "Value": {
                 "id": "27af1367-7389-431f-b758-ae0b59b1f11c",
@@ -412,6 +452,14 @@
                 "id": "5ec4944c-f972-4aee-9b7e-f17e1d1f5827",
                 "resourcePath": "options\\windows\\options_windows.yy",
                 "resourceType": "GMWindowsOptions"
+            }
+        },
+        {
+            "Key": "da68e930-e7c6-428f-a177-7fbfade3d003",
+            "Value": {
+                "id": "95f08560-5526-4509-9710-96725cad24ac",
+                "resourcePath": "scripts\\example_connect_server_handler\\example_connect_server_handler.yy",
+                "resourceType": "GMScript"
             }
         },
         {
@@ -506,7 +554,13 @@
         "2a99a58b-b311-4657-80df-acd6daf1e728",
         "4d9ae08f-b97f-467e-9945-affc8acd3964",
         "96396c47-ad05-4c4f-8d70-e8d43fea87bb",
-        "9f8dc220-efd7-424b-b2d9-4c272ab7224e"
+        "9f8dc220-efd7-424b-b2d9-4c272ab7224e",
+        "da68e930-e7c6-428f-a177-7fbfade3d003",
+        "13c7e014-41b0-47d6-ac69-ed61f16831af",
+        "b9849a19-c59c-46f6-a8d6-b3bc3cc5a982",
+        "78b9aec4-0611-42ce-801f-42059f7bfe8f",
+        "22db8a57-1d27-42c6-84d1-fa459d7a39a1",
+        "2198ce61-bfd6-4668-828e-dce98b12aed8"
     ],
     "tutorial": ""
 }
