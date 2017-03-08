@@ -10,6 +10,12 @@ var _session   = argument[0],
     _packet_id = argument[2],
     _values    = array_create(argument_count - 3, undefined);
 
+if (_session[? "socket"] == undefined) {
+    show_debug_message("[NETPLAY] Cannot send packet to closed socket");
+
+    return undefined;
+}
+
 for(var i = 3;i < argument_count;i ++) {
     _values[i - 3] = argument[i];
 }

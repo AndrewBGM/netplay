@@ -327,6 +327,14 @@
             }
         },
         {
+            "Key": "8ae4470a-6ebf-452a-8105-0abe33c6f498",
+            "Value": {
+                "id": "c4eaa6ab-cf3d-439f-baf9-c6a0abeb6fe8",
+                "resourcePath": "scripts\\netplay_session\\netplay_session.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "8ccaa617-cec8-4990-930f-4fa1765f2a63",
             "Value": {
                 "id": "280753b9-a8e9-4b69-8cad-7201b5b528c3",
@@ -536,6 +544,7 @@
         }
     ],
     "script_order": [
+        "8ae4470a-6ebf-452a-8105-0abe33c6f498",
         "dcbc39a9-170a-427f-ab53-3c87e52fa210",
         "c8220e35-7d31-40c2-89c8-474b2da4ac11",
         "33eae134-dd9d-41cd-a56a-51cc0db40880",

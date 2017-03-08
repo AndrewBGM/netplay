@@ -1,5 +1,5 @@
-session = undefined; // GameMaker is dumb
-session = netplay_open(5000, 32);
+session = netplay_session();
+socket  = netplay_open(session, 5000, 32);
 
 netplay_add_event_handler(session, network_type_connect, example_connect_server_handler);
 netplay_add_event_handler(session, network_type_data, example_data_server_handler);

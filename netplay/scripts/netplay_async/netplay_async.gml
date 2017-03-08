@@ -3,6 +3,10 @@
 
 var _session = argument[0];
 
+if (_session[? "socket"] == undefined) {
+    return;
+}
+
 var _async_type = async_load[? "type"],
     _async_id   = async_load[? "id"],
     _async_ip   = async_load[? "ip"],
