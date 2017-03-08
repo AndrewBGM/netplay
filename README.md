@@ -21,7 +21,7 @@ Packets are formatted chunks of data, making use of GameMaker's `buffer` functio
 netplay_add_packet(session, ECHO_PACKET_ID, buffer_string);
 ```
 
-When defining a packet via `netplay_add_packet`, you must supply a `session` and `packet_id`, and the remaining arguments specify the structure of the packet. In this case, a single string value. To send a packet, you would use `netplay_send`.
+When defining a packet via `netplay_add_packet`, you must supply a `session`  and `packet_id`, and the remaining arguments specify the structure of the packet. In this case, a single string value. To send a packet, you would use `netplay_send`.
 
 ```javascript
 netplay_send(session, socket, ECHO_PACKET_ID, "Hello World!");
@@ -55,8 +55,9 @@ When you are finished with the `session`, you should clean up all resources used
 
 ### Function List
 ```javascript
-netplay_connect(host, port)
-netplay_open(port, maxclients)
+netplay_session()
+netplay_connect(session, host, port)
+netplay_open(session, port, maxclients)
 netplay_send(session, socket, packet_id, values...)
 netplay_async(session)
 netplay_destroy(session)
