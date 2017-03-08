@@ -4,10 +4,10 @@ Networking abstraction layer for GameMaker Studio 2 which introduces formatted p
 
 ## Usage
 
-Netplay uses the concept of a `session` to manage your networking. You create a `session` by calling `netplay_session`, and using this in all future Netplay functions. A session can be either a client session or a server session, but not both. Once you have created your session, use `netplay_connect` or `netplay_open` to either connect to an existing server, or start a new server.
+Netplay uses the concept of a `session` to manage your networking. You create a `session` by calling `netplay_create_session`, and using this in all future Netplay functions. A session can be either a client session or a server session, but not both. Once you have created your session, use `netplay_connect` or `netplay_open` to either connect to an existing server, or start a new server.
 
 ```javascript
-var session = netplay_session();
+var session = netplay_create_session();
 
 var socket = netplay_connect(session, "localhost", 5000); // Connect to a server on localhost:5000
 var socket = netplay_open(session, 5000, 32); // Start a new server on localhost:5000
@@ -55,7 +55,7 @@ When you are finished with the `session`, you should clean up all resources used
 
 ### Function List
 ```javascript
-netplay_session()
+netplay_create_session()
 netplay_connect(session, host, port)
 netplay_open(session, port, maxclients)
 netplay_send(session, socket, packet_id, values...)

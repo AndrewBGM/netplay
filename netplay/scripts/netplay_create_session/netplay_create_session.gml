@@ -1,4 +1,4 @@
-/// @description netplay_session
+/// @description netplay_create_session
 
 
 var _session = ds_map_create();

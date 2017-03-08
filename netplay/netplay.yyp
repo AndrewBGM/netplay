@@ -330,7 +330,7 @@
             "Key": "8ae4470a-6ebf-452a-8105-0abe33c6f498",
             "Value": {
                 "id": "c4eaa6ab-cf3d-439f-baf9-c6a0abeb6fe8",
-                "resourcePath": "scripts\\netplay_session\\netplay_session.yy",
+                "resourcePath": "scripts\\netplay_create_session\\netplay_create_session.yy",
                 "resourceType": "GMScript"
             }
         },
