@@ -57,7 +57,7 @@ switch(_async_type) {
         if (_is_server) {
             var _remote_sockets = _session[? "remote_sockets"];
             
-            _process = (_async_id != _session[? "socket"] && ds_list_find_index(_remote_sockets, _async_id) == 0);
+            _process = (_async_id != _session[? "socket"] && ds_list_find_index(_remote_sockets, _async_id) > -1);
         }
         
         if (!_process) {
