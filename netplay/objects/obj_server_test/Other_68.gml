@@ -1,0 +1,1 @@
+netplay_async(session);

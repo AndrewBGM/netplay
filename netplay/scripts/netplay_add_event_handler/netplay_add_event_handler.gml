@@ -1,19 +1,21 @@
 /// @description netplay_add_event_handler
-/// @param session
-/// @param type
-/// @param handler
+/// @param id
+/// @param event
+/// @param script
 
 
 var _session = argument[0],
-    _type    = argument[1],
-    _handler = argument[2];
+    _event   = argument[1],
+    _script  = argument[2];
 
-var _event_handlers = _session[? "event_handlers"];
 
-if !ds_map_exists(_event_handlers, _type) {
-    ds_map_add_list(_event_handlers, _type, ds_list_create());
+var _session_event_handlers = _session[? __NETPLAY_SESSION_EVENT_HANDLERS],
+    _event_handlers         = _session_event_handlers[? _event];
+
+if (_event_handlers == undefined) {
+    _event_handlers = ds_list_create();
+    
+    ds_map_add_list(_session_event_handlers, _event, _event_handlers);
 }
 
-var _handlers = _event_handlers[? _type];
-
-ds_list_add(_handlers, _handler);
+ds_list_add(_event_handlers, _script);

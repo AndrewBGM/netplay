@@ -1,21 +1,23 @@
 /// @description netplay_remove_event_handler
-/// @param session
-/// @param type
-/// @param handler
+/// @param id
+/// @param event
+/// @param script
 
 
 var _session = argument[0],
-    _type    = argument[1],
-    _handler = argument[2];
+    _event   = argument[1],
+    _script  = argument[2];
 
-var _event_handlers = _session[? "event_handlers"];
 
-if ds_map_exists(_event_handlers, _type) {
-    var _handlers = _event_handlers[? _type];
-    
-    var _index = ds_list_find_index(_handlers, _handler);
-    
-    if (_index >= 0) {
-        ds_list_delete(_handlers, _index);
-    }
+var _session_event_handlers = _session[? __NETPLAY_SESSION_EVENT_HANDLERS],
+    _event_handlers         = _session_event_handlers[? _event];
+
+if (_event_handlers == undefined) {
+    return;
+}
+
+var _index = ds_list_find_index(_event_handlers, _script);
+
+if (_index >= 0) {
+    ds_list_delete(_event_handlers, _index);
 }

@@ -1,7 +1,8 @@
 /// @description netplay_get_header_type
-/// @param session
+/// @param id
 
 
 var _session = argument[0];
 
-return _session[? "header_type"];
+
+return _session[? __NETPLAY_SESSION_HEADER_TYPE];

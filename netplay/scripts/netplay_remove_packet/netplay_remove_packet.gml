@@ -1,13 +1,12 @@
 /// @description netplay_remove_packet
-/// @param session
 /// @param id
+/// @param header
 
 
-var _session   = argument[0],
-    _id        = argument[1];
+var _session = argument[0],
+    _header  = argument[1];
 
-var _packets = _session[? "packets"];
 
-if ds_map_exists(_packets, _id) {
-    ds_map_delete(_packets, _id);
-}
+var _session_packets = _session[? __NETPLAY_SESSION_PACKETS];
+
+ds_map_delete(_session_packets, _header);

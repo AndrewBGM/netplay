@@ -1,4 +1,0 @@
-enum ExamplePackets {
-    Echo,
-    Increment
-}

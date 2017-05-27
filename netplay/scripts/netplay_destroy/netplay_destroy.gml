@@ -1,13 +1,17 @@
 /// @description netplay_destroy
-/// @param session
+/// @param id
 
 
 var _session = argument[0];
 
-if (_session[? "socket"] != undefined) {
-    network_destroy(_session[? "socket"]);
+
+var _session_socket = _session[? __NETPLAY_SESSION_SOCKET],
+    _session_buffer = _session[? __NETPLAY_SESSION_BUFFER];
+
+if (_session_socket != undefined) {
+    netplay_close(_session, _session_socket);
 }
 
-buffer_delete(_session[? "buffer"]);
+buffer_delete(_session_buffer);
 
 ds_map_destroy(_session);

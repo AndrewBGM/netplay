@@ -1,5 +1,5 @@
 {
-    "id": "8a85911f-783a-433f-a823-672698db77b0",
+    "id": "7133662f-0cb8-4e27-9cd9-50d81a949ca1",
     "modelName": "GMScript",
     "mvc": "1.0",
     "name": "netplay_get_packet_handlers",

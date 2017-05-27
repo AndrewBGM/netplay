@@ -1,5 +1,5 @@
 {
-    "id": "06f58e90-2414-4498-8576-ec97b73e4db5",
+    "id": "3217d362-474d-4435-b95f-b5a02421e2d7",
     "modelName": "GMScript",
     "mvc": "1.0",
     "name": "netplay_get_remote_sockets",

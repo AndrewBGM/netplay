@@ -1,5 +1,5 @@
 {
-    "id": "aaf7eac0-289d-4ef2-b5ec-5b71c33cf226",
+    "id": "eab3aad6-d226-4bfb-a87a-68970b265173",
     "modelName": "GMScript",
     "mvc": "1.0",
     "name": "netplay_async",

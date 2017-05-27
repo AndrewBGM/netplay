@@ -1,17 +1,14 @@
 /// @description netplay_add_packet
-/// @param session
 /// @param id
-/// @param types...
+/// @param header
+/// @param types[]
 
 
-var _session   = argument[0],
-    _id        = argument[1],
-    _types     = array_create(argument_count - 2, undefined);
+var _session = argument[0],
+    _header  = argument[1],
+    _types   = argument[2];
 
-for(var i = 2;i < argument_count;i ++) {
-    _types[i - 2] = argument[i];
-}
 
-var _packets = _session[? "packets"];
+var _session_packets = _session[? __NETPLAY_SESSION_PACKETS];
 
-_packets[? _id] = _types;
+_session_packets[? _header] = _types;

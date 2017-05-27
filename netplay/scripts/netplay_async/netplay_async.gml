@@ -1,9 +1,19 @@
 /// @description netplay_async
-/// @param session
+/// @param id
+
 
 var _session = argument[0];
 
-if (_session[? "socket"] == undefined) {
+
+var _session_socket          = _session[? __NETPLAY_SESSION_SOCKET],
+    _session_packets         = _session[? __NETPLAY_SESSION_PACKETS],
+    _session_header_type     = _session[? __NETPLAY_SESSION_HEADER_TYPE],
+    _session_packet_handlers = _session[? __NETPLAY_SESSION_PACKET_HANDLERS],
+    _session_event_handlers  = _session[? __NETPLAY_SESSION_EVENT_HANDLERS],
+    _session_remote_sockets  = _session[? __NETPLAY_SESSION_REMOTE_SOCKETS],
+    _session_packet_queue    = _session[? __NETPLAY_SESSION_PACKET_QUEUE];
+
+if (_session_socket == undefined) {
     return;
 }
 
@@ -13,23 +23,33 @@ var _async_type = async_load[? "type"],
     _async_port = async_load[? "port"];
 
 switch(_async_type) {
-    case network_type_connect:
+    case network_type_non_blocking_connect:
         var _async_socket  = async_load[? "socket"],
-            _async_success = async_load[? "success"];
+            _async_success = async_load[? "succeeded"];
 
-        if (_async_id != _session[? "socket"]) {
+        if (_async_id != _session_socket) {
             return;
         }
-
-        var _is_server = (_session[? "host"] == "self");
         
-        if (_is_server) {
-            var _remote_sockets = _session[? "remote_sockets"];
-            
-            ds_list_add(_remote_sockets, _async_socket);
+        var _is_remote = (_session_remote_sockets == undefined);
+        
+        if (!_is_remote) {
+            return;
         }
+        
+        _session[? __NETPLAY_SESSION_STATUS] = (_async_success == true) ? NETPLAY_STATUS_CONNECTED : NETPLAY_STATUS_ERROR;
+    
+        if (_session_packet_queue != undefined) {
+            for(var k = 0, l = ds_list_size(_session_packet_queue);k < l;k ++) {
+                var _data = _session_packet_queue[| k];
 
-        var _event_handlers = netplay_get_event_handlers(_session, network_type_connect);
+                netplay_send(_session, _data[0], _data[1], _data[2]);
+            }
+
+            ds_map_delete(_session, __NETPLAY_SESSION_PACKET_QUEUE);
+        }
+        
+        var _event_handlers = _session_event_handlers[? NETPLAY_EVENT_CONNECT];
         
         if (_event_handlers == undefined) {
             return;
@@ -38,39 +58,69 @@ switch(_async_type) {
         for(var i = 0, j = ds_list_size(_event_handlers);i < j;i ++) {
             var _handler = _event_handlers[| i];
             
-            var _pass = script_execute(_handler, _session, _async_socket, _async_ip, _async_port, _async_success);
+            var _pass = script_execute(_handler, _session, NETPLAY_EVENT_CONNECT, _async_socket, _async_ip, _async_port);
             
             if (_pass == false) {
                 break;
             }
         }
+    break;
 
+    case network_type_connect:
+        var _async_socket  = async_load[? "socket"],
+            _async_success = async_load[? "succeeded"];
+
+        if (_async_id != _session_socket) {
+            return;
+        }
+        
+        var _is_remote = (_session_remote_sockets == undefined);
+        
+        if (_is_remote) {
+            return;
+        }
+        
+        ds_map_add(_session_remote_sockets, _async_socket, [_async_ip, _async_port]);
+        
+        var _event_handlers = _session_event_handlers[? NETPLAY_EVENT_CONNECT];
+        
+        if (_event_handlers == undefined) {
+            return;
+        }
+        
+        for(var i = 0, j = ds_list_size(_event_handlers);i < j;i ++) {
+            var _handler = _event_handlers[| i];
+            
+            var _pass = script_execute(_handler, _session, NETPLAY_EVENT_CONNECT, _async_socket);
+            
+            if (_pass == false) {
+                break;
+            }
+        }
     break;
     
     case network_type_data:
         var _async_buffer = async_load[? "buffer"],
             _async_size   = async_load[? "size"];
 
-        var _is_server = (_session[? "host"] == "self"),
-            _process = (_async_id == _session[? "socket"]);
+        var _is_remote = (_session_remote_sockets == undefined),
+            _process   = (_async_id == _session_socket);
 
-        if (_is_server) {
-            var _remote_sockets = _session[? "remote_sockets"];
-            
-            _process = (_async_id != _session[? "socket"] && ds_list_find_index(_remote_sockets, _async_id) > -1);
+        if (!_is_remote) {
+            _process = (_async_id != _session_socket && ds_map_exists(_session_remote_sockets, _async_id));
         }
         
         if (!_process) {
             return;
         }
-
-        var _event_handlers = netplay_get_event_handlers(_session, network_type_data);
+        
+        var _event_handlers = _session_event_handlers[? NETPLAY_EVENT_RECV];
         
         if (_event_handlers != undefined) {
             for(var i = 0, j = ds_list_size(_event_handlers);i < j;i ++) {
                 var _handler = _event_handlers[| i];
             
-                var _pass = script_execute(_handler, _session, _async_id, _async_ip, _async_port, _async_buffer);
+                var _pass = script_execute(_handler, _session, NETPLAY_EVENT_RECV, _async_id, _async_buffer);
                 
                 buffer_seek(_async_buffer, buffer_seek_start, 0);
 
@@ -82,55 +132,55 @@ switch(_async_type) {
         
         buffer_seek(_async_buffer, buffer_seek_start, 0);
         
-        var _packets         = _session[? "packets"],
-            _packet_id       = buffer_read(_async_buffer, _session[? "header_type"]),
-            _packet_types    = netplay_get_packet(_session, _packet_id),
-            _packet_handlers = netplay_get_packet_handlers(_session, _packet_id);
-        
+        var _packet_header = buffer_read(_async_buffer, _session_header_type),
+            _packet_types  = _session_packets[? _packet_header],
+            _packet_handlers = _session_packet_handlers[? NETPLAY_EVENT_RECV];
+
+        if (_packet_handlers != undefined) {
+            _packet_handlers = _packet_handlers[? _packet_header];
+        }
+
         if (_packet_types == undefined || _packet_handlers == undefined) {
             return;
         }
         
-        var _values = array_create(array_length_1d(_packet_types), undefined);
+        var _count  = array_length_1d(_packet_types),
+            _values = array_create(_count, undefined);
         
-        for(var k = 0, l = array_length_1d(_values);k < l;k ++) {
+        for(var k = 0;k < _count;k ++) {
             _values[k] = buffer_read(_async_buffer, _packet_types[k]);
         }
         
-        for(var m = 0, n = ds_list_size(_packet_handlers);m < n;m ++) {
-            var _handler = _packet_handlers[| m];
+        for(var l = 0, m = ds_list_size(_packet_handlers);l < m;l ++) {
+            var _handler = _packet_handlers[| l];
             
-            var _pass = script_execute(_handler, _session, _async_id, _async_ip, _async_port, _packet_id, _values);
+            var _pass = script_execute(_handler, _session, NETPLAY_EVENT_RECV, _async_id, _packet_header, _values);
             
-            if (!_pass) {
+            if (_pass == false) {
                 break;
             }
         }
-        
-        
     break;
     
     case network_type_disconnect:
         var _async_socket  = async_load[? "socket"],
-            _async_success = async_load[? "success"];
+            _async_success = async_load[? "succeeded"];
 
-        if (_async_id != _session[? "socket"]) {
+        if (_async_id != _session_socket) {
+            return;
+        }
+        
+        var _is_remote = (_session_remote_sockets == undefined);
+        
+        if (_is_remote) {
             return;
         }
 
-        var _is_server = (_session[? "host"] == "self");
-        
-        if (_is_server) {
-            var _remote_sockets = _session[? "remote_sockets"];
-            
-            var _index = ds_list_find_index(_remote_sockets, _async_id);
-
-            if (_index >= 0) {
-                ds_list_delete(_remote_sockets, _index);
-            }
+        if (ds_map_exists(_session_remote_sockets, _async_socket)) {
+            ds_map_delete(_session_remote_sockets, _async_socket);
         }
-
-        var _event_handlers = netplay_get_event_handlers(_session, network_type_disconnect);
+        
+        var _event_handlers = _session_event_handlers[? NETPLAY_EVENT_DISCONNECT];
         
         if (_event_handlers == undefined) {
             return;
@@ -139,12 +189,11 @@ switch(_async_type) {
         for(var i = 0, j = ds_list_size(_event_handlers);i < j;i ++) {
             var _handler = _event_handlers[| i];
             
-            var _pass = script_execute(_handler, _session, _async_socket, _async_ip, _async_port, _async_success);
+            var _pass = script_execute(_handler, _session, NETPLAY_EVENT_DISCONNECT, _async_socket);
             
             if (_pass == false) {
                 break;
             }
         }
-
     break;
 }
