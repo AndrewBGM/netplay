@@ -4,6 +4,7 @@
 gml_pragma("global", "netplay_readme();");
 
 #macro NETPLAY_TYPE_TCP 0
+#macro NETPLAY_TYPE_UDP 1
 
 #macro NETPLAY_EVENT_CONNECT    0
 #macro NETPLAY_EVENT_SEND       1

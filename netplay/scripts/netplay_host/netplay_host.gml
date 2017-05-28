@@ -11,19 +11,18 @@ var _session    = argument[0],
 
 ds_map_add_map(_session, __NETPLAY_SESSION_REMOTE_SOCKETS, ds_map_create());
 
-var _session_type = _session[? __NETPLAY_SESSION_TYPE];
+var _session_type = _session[? __NETPLAY_SESSION_TYPE],
+    _socket       = undefined;
 
 switch(_session_type) {
     case NETPLAY_TYPE_TCP:
-        _session_type = network_socket_tcp;
+        _socket = network_create_server(network_socket_tcp, _port, _maxclients);
     break;
     
     default:
         show_error("[NETPLAY] Unsupported session type!", true);
     break;
 }
-
-var _socket = network_create_server(_session_type, _port, _maxclients);
 
 if (_socket < 0) {
     show_debug_message("[NETPLAY] Failed to start server on port " + string(_port));
